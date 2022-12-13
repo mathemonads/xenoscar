@@ -2,10 +2,10 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
-backLegSensorValues = np.load("data/backLegSensorValues.npy")
-frontLegSensorValues = np.load("data/frontLegSensorValues.npy")
-BL_targetAngles = np.load("data/BL_targetAngles.npy")
-FL_targetAngles = np.load("data/FL_targetAngles.npy")
+backLegSensorValues = np.load("data/BackLeg.npy")
+frontLegSensorValues = np.load("data/FrontLeg.npy")
+BL_targetAngles = np.load("data/Torso_BackLeg.npy")
+FL_targetAngles = np.load("data/Torso_FrontLeg.npy")
 
 #plt.plot(backLegSensorValues, linewidth=2)
 #plt.plot(frontLegSensorValues, linewidth=5)
