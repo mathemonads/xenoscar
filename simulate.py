@@ -6,5 +6,5 @@ physicsClient = p.connect(p.GUI)
 for i in range(1,1000):
     print(i)
     p.stepSimulation()
-    sleep(1/100)    
+    sleep(1/60)    
 p.disconnect()
