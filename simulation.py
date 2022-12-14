@@ -14,11 +14,13 @@ class SIMULATION:
     def __init__(self, num, MAX_FORCE, directOrGui):
         self.num = num
         self.MAX_FORCE = MAX_FORCE
-        self.time = np.linspace(0, 2*c.pi, self.num)
+        self.time = np.linspace(0, c.T, self.num)
 
         MODE = p.GUI # p.DIRECT
-        if directOrGui == "DIRECT":
+        self.directOrGui = directOrGui
+        if self.directOrGui == "DIRECT":
             MODE = p.DIRECT
+
         self.physicsClient = p.connect(MODE)
         p.setAdditionalSearchPath(pybullet_data.getDataPath())
         p.setGravity(0, 0, c.G)
@@ -35,7 +37,8 @@ class SIMULATION:
             self.robot.Think()
             self.robot.Act(pyrosim, p, i, t)
         
-            sleep(c.waitTime)
+            if self.directOrGui == "GUI":
+                sleep(c.waitTime)
 
     def Get_Fitness(self):
         self.robot.Get_Fitness(p)
