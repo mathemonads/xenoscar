@@ -11,12 +11,15 @@ from world import WORLD
 from robot import ROBOT
 
 class SIMULATION:
-    def __init__(self, num, MAX_FORCE):
+    def __init__(self, num, MAX_FORCE, directOrGui):
         self.num = num
         self.MAX_FORCE = MAX_FORCE
         self.time = np.linspace(0, 2*c.pi, self.num)
 
-        self.physicsClient = p.connect(p.GUI)
+        MODE = p.GUI # p.DIRECT
+        if directOrGui == "DIRECT":
+            MODE = p.DIRECT
+        self.physicsClient = p.connect(MODE)
         p.setAdditionalSearchPath(pybullet_data.getDataPath())
         p.setGravity(0, 0, c.G)
 
@@ -32,7 +35,10 @@ class SIMULATION:
             self.robot.Think()
             self.robot.Act(pyrosim, p, i, t)
         
-            sleep(1/240)
+            sleep(c.waitTime)
+
+    def Get_Fitness(self):
+        self.robot.Get_Fitness(p)
     
     def __del__(self):
         self.robot.Save_Values()

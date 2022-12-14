@@ -1,6 +1,7 @@
 
 from math import pi
 
+#import pybullet as p
 # import pyrosim.pyrosim as pyrosim
 from pyrosim.neuralNetwork import NEURAL_NETWORK
 
@@ -13,6 +14,7 @@ class ROBOT:
         self.MAX_FORCE = MAX_FORCE
 
         self.robotId = p.loadURDF("body.urdf")
+        self.robot = self.robotId 
         self.nn = NEURAL_NETWORK("brain.nndf")
 
         pyrosim.Prepare_To_Simulate(self.robotId)
@@ -35,7 +37,7 @@ class ROBOT:
 
     def Think(self):
         self.nn.Update()
-        self.nn.Print()
+        # self.nn.Print()
 
     def Act(self, pyrosim, p, i, t):
         for neuronName in self.nn.Get_Neuron_Names():
@@ -43,6 +45,16 @@ class ROBOT:
                 jointName = self.nn.Get_Motor_Neurons_Joint(neuronName)
                 desiredAngle = self.nn.Get_Value_Of(neuronName)
                 self.motors[jointName].Set_Value(pyrosim, p, self, i, desiredAngle)
+
+    def Get_Fitness(self, p):
+        stateOfLinkZero = p.getLinkState(self.robot, 0)
+        positionOfLinkZero = stateOfLinkZero[0]
+        xCoordinateOfLinkZero = positionOfLinkZero[0]
+        fh  = open("fitness.txt", "w")
+        fh.write(str(xCoordinateOfLinkZero))
+        fh.close()
+
+        exit()
 
     def Save_Values(self):
         for (linkName,_) in self.sensors.items():

@@ -1,9 +1,12 @@
 
+import sys
 from simulation import SIMULATION
+import constants as c
 
-num = 1000
-MAX_FORCE = 40
+directOrGui = sys.argv[1]
+print(directOrGui)
 
-simulation = SIMULATION(num, MAX_FORCE)
+simulation = SIMULATION(c.numTimeSteps, c.MAX_FORCE, directOrGui)
 simulation.Run()
+simulation.Get_Fitness()
 del(simulation)

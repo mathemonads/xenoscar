@@ -1,6 +1,8 @@
 
 from os import system
+from hillclimber import HILL_CLIMBER
+from solution import SOLUTION
 
-for i in range(2):
-    system("python3 generate.py")
-    system("python3 simulate.py")
+hc = HILL_CLIMBER()
+hc.Evolve()
+hc.Show_Best()
