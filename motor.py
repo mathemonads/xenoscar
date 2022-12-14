@@ -12,8 +12,8 @@ class MOTOR:
         self.phaseOffset = phaseOffset
         self.values = np.zeros(self.num)
 
-    def Set_Value(self, pyrosim, p, robot, i, t):
-        self.values[i] = self.amplitude * np.sin(self.frequency * t + self.phaseOffset)
+    def Set_Value(self, pyrosim, p, robot, i, desiredAngle):
+        self.values[i] = self.amplitude * np.sin(self.frequency * desiredAngle + self.phaseOffset)
         pyrosim.Set_Motor_For_Joint(
             bodyIndex = robot.robotId,
             jointName = self.jointName,
