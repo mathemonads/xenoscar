@@ -5,6 +5,7 @@ G = -9.8
 MAX_FORCE = 50
 
 numTimeSteps = 1000
-waitTime = 1/360
+T = 2 * pi
+waitTime = 1 / 360
 
-numberOfGenerations = 10
+numberOfGenerations = 9
