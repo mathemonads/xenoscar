@@ -2,6 +2,8 @@
 from math import pi
 
 # import pyrosim.pyrosim as pyrosim
+from pyrosim.neuralNetwork import NEURAL_NETWORK
+
 from sensor import SENSOR
 from motor import MOTOR
 
@@ -11,6 +13,8 @@ class ROBOT:
         self.MAX_FORCE = MAX_FORCE
 
         self.robotId = p.loadURDF("body.urdf")
+        self.nn = NEURAL_NETWORK("brain.nndf")
+
         pyrosim.Prepare_To_Simulate(self.robotId)
         self.Prepare_To_Sense(pyrosim, num)
         self.Prepare_To_Act(pyrosim, num)
@@ -29,9 +33,16 @@ class ROBOT:
         for (linkName,_) in self.sensors.items():
             self.sensors[linkName].Get_Value(pyrosim, i, t)
 
+    def Think(self):
+        self.nn.Update()
+        self.nn.Print()
+
     def Act(self, pyrosim, p, i, t):
-        for (jointName,_) in self.motors.items():
-            self.motors[jointName].Set_Value(pyrosim, p, self, i, t)
+        for neuronName in self.nn.Get_Neuron_Names():
+            if self.nn.Is_Motor_Neuron(neuronName):
+                jointName = self.nn.Get_Motor_Neurons_Joint(neuronName)
+                desiredAngle = self.nn.Get_Value_Of(neuronName)
+                self.motors[jointName].Set_Value(pyrosim, p, self, i, desiredAngle)
 
     def Save_Values(self):
         for (linkName,_) in self.sensors.items():

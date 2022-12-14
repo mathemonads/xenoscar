@@ -29,11 +29,10 @@ class SIMULATION:
             t = self.time[i]
             p.stepSimulation()
             self.robot.Sense(pyrosim, i, t)
+            self.robot.Think()
             self.robot.Act(pyrosim, p, i, t)
         
-            print(i+1, "/", self.num)
             sleep(1/240)
-        # end of simulation. log values
     
     def __del__(self):
         self.robot.Save_Values()

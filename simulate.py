@@ -7,5 +7,3 @@ MAX_FORCE = 40
 simulation = SIMULATION(num, MAX_FORCE)
 simulation.Run()
 del(simulation)
-
-import analyze
