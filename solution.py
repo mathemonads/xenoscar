@@ -22,21 +22,22 @@ class SOLUTION():
     def Set_ID(self, ID):
         self.myID = ID
 
-    def Generate_World(self):
+    def Send_World(self):
         pyrosim.Start_SDF("world.sdf")
         pyrosim.Send_Cube(name="Box", pos=[x-length*2,y+width*2,z], size=[length,width,height])
         pyrosim.End()
     
-    def Generate_Body(self):
+    def Send_Body(self):
         pyrosim.Start_URDF("body.urdf")
-        pyrosim.Send_Cube(name="Torso", pos=[0,0.0,1.5], size=[length,width,height])
-        pyrosim.Send_Joint(name="Torso_FrontLeg", parent="Torso", child="FrontLeg", type="revolute", position=[-0.5,0,1.0])
-        pyrosim.Send_Cube(name="FrontLeg", pos=[-0.5,0,-0.5], size=[length,width,height])
-        pyrosim.Send_Joint(name="Torso_BackLeg", parent="Torso", child="BackLeg", type="revolute", position=[0.5,0,1.0])
-        pyrosim.Send_Cube(name="BackLeg", pos=[0.5,0,-0.5], size=[length,width,height])
+        pyrosim.Send_Cube(name="Torso", pos=[0,0.0,1.0], size=[length,width,height])
+        pyrosim.Send_Joint(name="Torso_FrontLeg", parent="Torso", child="FrontLeg", type="revolute", position=[0.0,0.5,1.0], jointAxis="1 0 0")
+        pyrosim.Send_Cube(name="FrontLeg", pos=[0.0,0.5,0.0], size=[0.2,1.0,0.2])
+
+        pyrosim.Send_Joint(name="Torso_BackLeg", parent="Torso", child="BackLeg", type="revolute", position=[0.0,-0.5,1.0], jointAxis="1 0 0")
+        pyrosim.Send_Cube(name="BackLeg", pos=[0.0,-0.5,0.0], size=[0.2,1.0,0.2])
         pyrosim.End()
     
-    def Generate_Brain(self):
+    def Send_Brain(self):
         pyrosim.Start_NeuralNetwork("brain" + str(self.myID) + ".nndf")
         pyrosim.Send_Sensor_Neuron(name=0, linkName="Torso")
         pyrosim.Send_Sensor_Neuron(name=1, linkName="BackLeg")
@@ -49,9 +50,9 @@ class SOLUTION():
         pyrosim.End()
 
     def Start_Simulation(self, directOrGUI):
-        self.Generate_World()
-        self.Generate_Body()
-        self.Generate_Brain()
+        self.Send_World()
+        self.Send_Body()
+        self.Send_Brain()
         system("python3 simulate.py " + directOrGUI + " " + str(self.myID) + " 2&>1 & ")
 
     def Wait_For_Simulation_To_End(self):
