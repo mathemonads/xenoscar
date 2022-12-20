@@ -33,7 +33,13 @@ class ROBOT:
     def Prepare_To_Act(self, pyrosim, num):
         self.motors = {}
         self.motors["Torso_BackLeg"] = MOTOR("Torso_BackLeg", pi/4.0, 4.0, pi/4.0, num, self.MAX_FORCE)
-        self.motors["Torso_FrontLeg"] = MOTOR("Torso_FrontLeg", pi/4.0, 8.0, 0.0, num, self.MAX_FORCE)
+        self.motors["Torso_FrontLeg"] = MOTOR("Torso_FrontLeg", pi/4.0, 8.0, pi/4.0, num, self.MAX_FORCE)
+        self.motors["Torso_LeftLeg"] = MOTOR("Torso_LeftLeg", pi/4.0, 8.0, pi/4.0, num, self.MAX_FORCE)
+        self.motors["Torso_RightLeg"] = MOTOR("Torso_RightLeg", pi/4.0, 8.0, pi/4.0, num, self.MAX_FORCE)
+        self.motors["FrontLeg_FrontLowerLeg"] = MOTOR("FrontLeg_FrontLowerLeg", pi/4.0, 8.0, pi/4.0, num, self.MAX_FORCE)
+        self.motors["BackLeg_BackLowerLeg"] = MOTOR("BackLeg_BackLowerLeg", pi/4.0, 8.0, pi/4.0, num, self.MAX_FORCE)
+        self.motors["LeftLeg_LeftLowerLeg"] = MOTOR("LeftLeg_LeftLowerLeg", pi/4.0, 8.0, pi/4.0, num, self.MAX_FORCE)
+        self.motors["RightLeg_RightLowerLeg"] = MOTOR("RghtLeg_RightLowerLeg", pi/4.0, 8.0, pi/4.0, num, self.MAX_FORCE)
 
     def Sense(self, pyrosim, i, t):
         for (linkName,_) in self.sensors.items():
