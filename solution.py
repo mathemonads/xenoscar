@@ -47,23 +47,24 @@ class SOLUTION():
                 pyrosim.Send_Synapse(sourceNeuronName=currentRow, targetNeuronName=currentColumn+3, weight=self.weights[currentRow][currentColumn])
         pyrosim.End()
 
-    def Start_Simation(self):
-        pass
-    def Wait_For_Simulation_To_End(self):
-        pass
-
-    def Evaluate(self, directOrGUI):
+    def Start_Simulation(self, directOrGUI):
         self.Send_World()
         self.Send_Body()
         self.Send_Brain()
         system("python3 simulate.py " + directOrGUI + " " + str(self.myID) + " & ")
+
+    def Wait_For_Simulation_To_End(self):
         fitnessFileName = "fitness" + str(self.myID) + ".txt"
         while not path.exists(fitnessFileName):
             sleep(0.01)
         fh = open(fitnessFileName, "r")
         self.fitness = float(fh.read())
         fh.close()
-        print(self.fitness)
+        system("rm " + fitnessFileName)
+        return self.fitness
+
+    def Evaluate(self, directOrGUI):
+        pass
 
     def Mutate(self):
         randomRow = randint(0,2)
