@@ -51,7 +51,7 @@ class SOLUTION():
         self.Send_World()
         self.Send_Body()
         self.Send_Brain()
-        system("python3 simulate.py " + directOrGUI + " " + str(self.myID) + " & ")
+        system("python3 simulate.py " + directOrGUI + " " + str(self.myID) + " 2&>1 & ")
 
     def Wait_For_Simulation_To_End(self):
         fitnessFileName = "fitness" + str(self.myID) + ".txt"
