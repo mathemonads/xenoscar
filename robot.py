@@ -58,9 +58,9 @@ class ROBOT:
                 self.motors[jointName].Set_Value(pyrosim, p, self, i, desiredAngle)
 
     def Get_Fitness(self, p):
-        stateOfLinkZero = p.getLinkState(self.robot, 0)
-        positionOfLinkZero = stateOfLinkZero[0]
-        xCoordinateOfLinkZero = positionOfLinkZero[0]
+        basePositionAndOrientation = p.getBasePositionAndOrientation(self.robot)
+        basePosition = basePositionAndOrientation[0]
+        xCoordinateOfLinkZero = basePosition[0]
         sn = str(self.solutionID) + ".txt"
         fh  = open("tmp"+sn, "w")
         fh.write(str(xCoordinateOfLinkZero))
