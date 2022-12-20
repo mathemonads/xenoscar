@@ -4,14 +4,21 @@ import copy
 from solution import SOLUTION
 import constants as c
 
-class HILL_CLIMBER():
+class PARALLEL_HILL_CLIMBER():
     def __init__(self):
-        self.parent = SOLUTION()
-        self.parent.Evaluate("GUI")
+        self.nextAvailableID = 0
+        self.parents = {}
+        for i in range(c.populationSize):
+            self.parents[i] = SOLUTION(self.nextAvailableID)
+            self.nextAvailableID += 1
+            self.parents[i].Evaluate("GUI")
+        print(self.parents)
 
     def Evolve(self):
-        for currentGeneration in range(c.numberOfGenerations):
-            self.Evolve_For_One_Generation("DIRECT")
+        for i in range(c.populationSize):
+            pass
+        # for currentGeneration in range(c.numberOfGenerations):
+        #     self.Evolve_For_One_Generation("DIRECT")
 
     def Evolve_For_One_Generation(self, MODE):
         self.Spawn()
@@ -22,6 +29,8 @@ class HILL_CLIMBER():
 
     def Spawn(self):
         self.child = copy.deepcopy(self.parent)
+        self.child.Set_ID(self.nextAvailableID)
+        self.nextAvailableID += 1
 
     def Mutate(self):
         self.child.Mutate()
@@ -35,4 +44,4 @@ class HILL_CLIMBER():
         print(self.parent.fitness, self.child.fitness)
 
     def Show_Best(self):
-        self.parent.Evaluate("GUI")
+        pass # self.parent.Evaluate("GUI")

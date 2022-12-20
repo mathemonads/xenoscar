@@ -3,10 +3,11 @@ import sys
 from simulation import SIMULATION
 import constants as c
 
-directOrGui = sys.argv[1]
-print(directOrGui)
+directOrGUI = sys.argv[1]
+solutionID = sys.argv[2]
+print(directOrGUI, solutionID)
 
-simulation = SIMULATION(c.numTimeSteps, c.MAX_FORCE, directOrGui)
+simulation = SIMULATION(c.numTimeSteps, c.MAX_FORCE, directOrGUI, solutionID)
 simulation.Run()
 simulation.Get_Fitness()
 del(simulation)

@@ -11,14 +11,14 @@ from world import WORLD
 from robot import ROBOT
 
 class SIMULATION:
-    def __init__(self, num, MAX_FORCE, directOrGui):
+    def __init__(self, num, MAX_FORCE, directOrGui, solutionID):
         self.num = num
         self.MAX_FORCE = MAX_FORCE
         self.time = np.linspace(0, c.T, self.num)
 
         MODE = p.GUI # p.DIRECT
-        self.directOrGui = directOrGui
-        if self.directOrGui == "DIRECT":
+        self.directOrGUI = directOrGui
+        if self.directOrGUI == "DIRECT":
             MODE = p.DIRECT
 
         self.physicsClient = p.connect(MODE)
@@ -26,7 +26,7 @@ class SIMULATION:
         p.setGravity(0, 0, c.G)
 
         self.world = WORLD(p)
-        self.robot = ROBOT(p, pyrosim, self.num, self.MAX_FORCE)
+        self.robot = ROBOT(p, pyrosim, self.num, self.MAX_FORCE, solutionID)
 
     def Run(self):
 
@@ -37,7 +37,7 @@ class SIMULATION:
             self.robot.Think()
             self.robot.Act(pyrosim, p, i, t)
         
-            if self.directOrGui == "GUI":
+            if self.directOrGUI == "GUI":
                 sleep(c.waitTime)
 
     def Get_Fitness(self):
