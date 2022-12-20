@@ -9,3 +9,4 @@ T = 2 * pi
 waitTime = 1 / 360
 
 numberOfGenerations = 9
+populationSize = 9

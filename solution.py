@@ -1,7 +1,8 @@
 
 import numpy as np
-from os import system
+from os import system, path
 from random import randint, random
+from time import sleep
 
 import pyrosim.pyrosim as pyrosim
 
@@ -13,15 +14,19 @@ y = 0
 z = height/2
 
 class SOLUTION():
-    def __init__(self):
+    def __init__(self, ID):
+        self.Set_ID(ID)
         self.weights = np.random.rand(3,2) * 2.0 - 1.0
 
-    def Create_World(self):
+    def Set_ID(self, ID):
+        self.myID = ID
+
+    def Send_World(self):
         pyrosim.Start_SDF("world.sdf")
         pyrosim.Send_Cube(name="Box", pos=[x-length*2,y+width*2,z], size=[length,width,height])
         pyrosim.End()
     
-    def Create_Body(self):
+    def Send_Body(self):
         pyrosim.Start_URDF("body.urdf")
         pyrosim.Send_Cube(name="Torso", pos=[0,0.0,1.5], size=[length,width,height])
         pyrosim.Send_Joint(name="Torso_FrontLeg", parent="Torso", child="FrontLeg", type="revolute", position=[-0.5,0,1.0])
@@ -30,8 +35,8 @@ class SOLUTION():
         pyrosim.Send_Cube(name="BackLeg", pos=[0.5,0,-0.5], size=[length,width,height])
         pyrosim.End()
     
-    def Create_Brain(self):
-        pyrosim.Start_NeuralNetwork("brain.nndf")
+    def Send_Brain(self):
+        pyrosim.Start_NeuralNetwork("brain" + str(self.myID) + ".nndf")
         pyrosim.Send_Sensor_Neuron(name=0, linkName="Torso")
         pyrosim.Send_Sensor_Neuron(name=1, linkName="BackLeg")
         pyrosim.Send_Sensor_Neuron(name=2, linkName="FrontLeg")
@@ -42,14 +47,24 @@ class SOLUTION():
                 pyrosim.Send_Synapse(sourceNeuronName=currentRow, targetNeuronName=currentColumn+3, weight=self.weights[currentRow][currentColumn])
         pyrosim.End()
 
-    def Evaluate(self, MODE):
-        self.Create_World()
-        self.Create_Body()
-        self.Create_Brain()
-        system("python3 simulate.py " + MODE)
-        fh = open("fitness.txt", "r")
+    def Start_Simulation(self, directOrGUI):
+        self.Send_World()
+        self.Send_Body()
+        self.Send_Brain()
+        system("python3 simulate.py " + directOrGUI + " " + str(self.myID) + " 2&>1 & ")
+
+    def Wait_For_Simulation_To_End(self):
+        fitnessFileName = "fitness" + str(self.myID) + ".txt"
+        while not path.exists(fitnessFileName):
+            sleep(0.01)
+        fh = open(fitnessFileName, "r")
         self.fitness = float(fh.read())
         fh.close()
+        system("rm " + fitnessFileName)
+        return self.fitness
+
+    def Evaluate(self, directOrGUI):
+        pass
 
     def Mutate(self):
         randomRow = randint(0,2)
