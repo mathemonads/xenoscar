@@ -16,6 +16,7 @@ class PARALLEL_HILL_CLIMBER():
             self.parents[i] = SOLUTION(self.nextAvailableID)
             self.nextAvailableID += 1
             self.parents[i].Evaluate("GUI")
+            #self.Evaluate(self.parents, "GUI")
 
     def Evolve(self):
         self.Evaluate(self.parents, "DIRECT")

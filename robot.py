@@ -4,6 +4,7 @@ from os import system
 
 #import pybullet as p
 # import pyrosim.pyrosim as pyrosim
+import constants as c
 from pyrosim.neuralNetwork import NEURAL_NETWORK
 
 from sensor import SENSOR
@@ -39,7 +40,7 @@ class ROBOT:
         self.motors["FrontLeg_FrontLowerLeg"] = MOTOR("FrontLeg_FrontLowerLeg", pi/4.0, 8.0, pi/4.0, num, self.MAX_FORCE)
         self.motors["BackLeg_BackLowerLeg"] = MOTOR("BackLeg_BackLowerLeg", pi/4.0, 8.0, pi/4.0, num, self.MAX_FORCE)
         self.motors["LeftLeg_LeftLowerLeg"] = MOTOR("LeftLeg_LeftLowerLeg", pi/4.0, 8.0, pi/4.0, num, self.MAX_FORCE)
-        self.motors["RightLeg_RightLowerLeg"] = MOTOR("RghtLeg_RightLowerLeg", pi/4.0, 8.0, pi/4.0, num, self.MAX_FORCE)
+        self.motors["RightLeg_RightLowerLeg"] = MOTOR("RightLeg_RightLowerLeg", pi/4.0, 8.0, pi/4.0, num, self.MAX_FORCE)
 
     def Sense(self, pyrosim, i, t):
         for (linkName,_) in self.sensors.items():
@@ -53,19 +54,18 @@ class ROBOT:
         for neuronName in self.nn.Get_Neuron_Names():
             if self.nn.Is_Motor_Neuron(neuronName):
                 jointName = self.nn.Get_Motor_Neurons_Joint(neuronName)
-                desiredAngle = self.nn.Get_Value_Of(neuronName)
+                desiredAngle = self.nn.Get_Value_Of(neuronName) * c.motorJointRange
                 self.motors[jointName].Set_Value(pyrosim, p, self, i, desiredAngle)
 
     def Get_Fitness(self, p):
-        stateOfLinkZero = p.getLinkState(self.robot, 0)
-        positionOfLinkZero = stateOfLinkZero[0]
-        xCoordinateOfLinkZero = positionOfLinkZero[0]
+        basePositionAndOrientation = p.getBasePositionAndOrientation(self.robot)
+        basePosition = basePositionAndOrientation[0]
+        xCoordinateOfLinkZero = basePosition[0]
         sn = str(self.solutionID) + ".txt"
         fh  = open("tmp"+sn, "w")
         fh.write(str(xCoordinateOfLinkZero))
         fh.close()
         system("mv tmp"+sn + " fitness"+sn) 
-        exit()
 
     def Save_Values(self):
         for (linkName,_) in self.sensors.items():
