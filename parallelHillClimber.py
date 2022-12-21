@@ -1,6 +1,6 @@
 
 from copy import deepcopy
-from numpy import argmin
+from numpy import argmax, argmin
 from os import system 
 
 from solution import SOLUTION
@@ -50,7 +50,7 @@ class PARALLEL_HILL_CLIMBER():
 
     def Select(self):
         for i in self.parents.keys():
-            if self.children[i].fitness < self.parents[i].fitness:
+            if self.children[i].fitness > self.parents[i].fitness:
                 self.parents[i] = self.children[i]
 
     def Print(self):
@@ -60,6 +60,6 @@ class PARALLEL_HILL_CLIMBER():
         print()
 
     def Show_Best(self):
-        m = argmin([self.parents[i].fitness for i in self.parents.keys()])
+        m = argmax([self.parents[i].fitness for i in self.parents.keys()])
         print("Fitness: " + str(self.parents[m].fitness))
         self.parents[m].Start_Simulation("GUI")
