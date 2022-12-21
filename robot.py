@@ -1,5 +1,5 @@
 
-from math import pi
+from math import pi, sin
 from os import system
 
 #import pybullet as p
@@ -45,6 +45,7 @@ class ROBOT:
     def Sense(self, pyrosim, i, t):
         for (linkName,_) in self.sensors.items():
             self.sensors[linkName].Get_Value(pyrosim, i, t)
+        self.sensors["Torso"].values[i] = sin(t * 0.99)
 
     def Think(self):
         self.nn.Update()
@@ -60,10 +61,11 @@ class ROBOT:
     def Get_Fitness(self, p):
         basePositionAndOrientation = p.getBasePositionAndOrientation(self.robot)
         basePosition = basePositionAndOrientation[0]
-        xCoordinateOfLinkZero = basePosition[0]
+        xPosition = basePosition[0]
+        zPosition = basePosition[2]
         sn = str(self.solutionID) + ".txt"
         fh  = open("tmp"+sn, "w")
-        fh.write(str(xCoordinateOfLinkZero))
+        fh.write(str(zPosition))
         fh.close()
         system("mv tmp"+sn + " fitness"+sn) 
 
