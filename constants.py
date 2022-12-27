@@ -7,6 +7,7 @@ MAX_FORCE = 50
 numSensorNeurons = 4
 numMotorNeurons = 8
 motorJointRange = 0.2
+x = 1.0
 
 numTimeSteps = 1000 * 1
 T = 2 * pi 

@@ -45,7 +45,7 @@ class ROBOT:
     def Sense(self, pyrosim, i, t):
         for (linkName,_) in self.sensors.items():
             self.sensors[linkName].Get_Value(pyrosim, i, t)
-        self.sensors["Torso"].values[i] = sin(t * 0.99)
+        self.sensors["Torso"].values[i] = sin(t * c.x)
 
     def Think(self):
         self.nn.Update()
